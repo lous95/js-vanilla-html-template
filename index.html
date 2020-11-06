@@ -153,6 +153,11 @@
             margin: 6px 0;
         }
 
+        #throw-error{
+            color: red;
+            font-size: 50px;
+        }
+
         @media (min-width: 568px) {
             .info {
                 flex-flow: row wrap;
@@ -168,6 +173,7 @@
 
 <body>
     <div class="main-block">
+        <p id="throw-error"></p>
         <div class="error-list"></div>
         <h1>Rate our products</h1>
         <form action="/">
@@ -197,7 +203,7 @@
                 <h3>Rate Our Website</h3>
                 <div>
                     <input type="radio" class="grade-type-checked" value="Excellent" id="radioOne" name="grade"
-                        checked />
+                        />
                     <label for="radioOne" class="radio">Excellent</label>
                 </div>
                 <div>

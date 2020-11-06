@@ -8,6 +8,8 @@ const gradeTypeInputArr = Array.from(gradeTypeInput);
 const rateCommentInput = document.getElementById('rate-comment');
 const submitButton = document.querySelector('#submit-button');
 const errorList = document.querySelector('.error-list');
+const throwError = document.getElementById('throw-error');
+
 
 
 var onlyNumbers = /^[0-9]+$/;
@@ -23,7 +25,7 @@ $(function () {
     $('#email-error-message').hide();
     $('#phone-error-message').hide();
 
-    $('#name').focusout(function () {
+    $('#name').blur(function () {
         checkValidName();
     })
 
@@ -100,48 +102,43 @@ submitButton.addEventListener('click', function (e) {
     var ratingCommentInput = rateCommentInput.value;
 
     if (!nameInput.value.match(onlyLetters) || nameInput == "") {
-        // alert("Name is required. Only letters are allowed!");
-        // return;
         listOfErrors.push("Name input should be only letters and not empty(required)");
     }
 
 
     if (!ageInput.value.match(onlyNumbers) || ageInput == "") {
-        // alert("Age is required. Only numbers are allowed!");
-        // return;
         listOfErrors.push("Age input should only be numbers and not empty(required)")
     }
 
     if (!validEmail.test(emailInput.value || emailInput == "")) {
-        // alert("Email field is required. Only valid emails are allowed!");
-        // return;
         listOfErrors.push("You should provide valid Email(required)");
     }
 
     if (phoneInput.value.match(onlyNumbers) && !(phoneInput == "")) {
         if (phoneInput.value.length < 7 || phoneInput.value.length > 15) {
-            // alert("Phone numbers should be between 7 and 15");
-            // return;
             listOfErrors.push("Your phone number should be between 7 and 15 digits!")
         }
     }
     else {
-        // alert("Phone is required. Only numbers are allowed");
-        // return;
         listOfErrors.push("Phone number input should be only numbers and not empty(required)")
     }
 
 
-    // gradeTypeInput.forEach(function (element) {
-    //     if (element.checked == true) {
-    //         ratingType = element.defaultValue;
-    //     }
-    // });
+  
 
     if (!(listOfErrors.length > 0)) {
         ratingType = findChecked(gradeTypeInputArr);
-        console.log(ratingType);
-        var newRating = new RatingModel(nameInputValue, ageInputValue, emailInputValue, phoneInputValue, ratingType, ratingCommentInput);
+        
+        try{
+            if(ratingType.length < 1) throw "You didnt Check a rating!";
+        }
+        catch(err){
+            throwError.innerText = err;
+            return;
+        }
+      
+        ratingTypeValue = ratingType[0].defaultValue;
+        var newRating = new RatingModel(nameInputValue, ageInputValue, emailInputValue, phoneInputValue, ratingTypeValue, ratingCommentInput);
         submittedRatings.push(newRating);
         console.log(submittedRatings);
     }
@@ -167,19 +164,11 @@ function RatingModel(name, age, email, phone, rating, ratingComment) {
     this.ratingComment = ratingComment;
 }
 
-// function findChecked(arr){
-//     var x;
-//     arr.filter(function (element){
-//         if(element.checked == true){
-//             x = element.defaultValue;
-//             return;
-//         }
-//     })
-//     return x;
-
-
 function findChecked(arr){
-    arr.filter(function(element){
-        return element.checked == true;
-    })
-}
+    var filtered =  arr.filter(function(element){
+         return element.checked == true;
+     }); 
+ 
+     return filtered; 
+ }
+ 
